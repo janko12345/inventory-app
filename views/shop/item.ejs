@@ -1,0 +1,32 @@
+
+<div class="container-fluid">
+    <div class="row w-50 mx-auto">
+        <div class="col-5">
+            	<img class="mw-100" src="<%= item.imgUrl %>" alt="item image">
+        </div>
+        <div class="col-7">
+            <p class="border-bottom"><strong>Id: </strong><%= item._id %></p>
+            <p class="border-bottom"><strong>Brand: </strong><%= item.brand %></p>
+            <p class="border-bottom"><strong>Description: </strong><%= item.description %></p>
+            <p class="border-bottom"><strong>Category: </strong><%= item.category.name %></p>
+            <p class="border-bottom"><strong>Stock: </strong><%= item.stock %> pieces</p>
+            <p class="border-bottom"><strong>Price: </strong><%= item.price %> €</p>
+                    <form action="<%= `/shop/buyItem/${item._id}` %>" method="POST" class="d-inline">
+                        <button <%= item.stock === 0 ? "disabled" : "" %> class="btn btn-primary btn-lg"><%= item.stock === 0 ? "Sold out" : "Buy"%></button>
+                    </form>
+                    <% if (locals.isAdmin) { %>
+                     <a href="<%= `/admin/updateItem/${item._id}` %>" role="button" class="btn btn-primary btn-lg">update</a>
+                     <form method="post" action="<%= `/admin/deleteItem/${item._id}` %>" class="d-inline-block" >
+                         <button id="del-item-btn" class="btn btn-primary btn-lg">delete</button>
+                     </form>
+                    <% } %>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelector("#del-item-btn").addEventListener("click", (event) =>{
+        event.preventDefault();
+        event.target.textContent = "Are you sure?";
+    },{once: true})
+</script>

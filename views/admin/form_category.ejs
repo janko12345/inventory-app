@@ -1,0 +1,17 @@
+<% if (!locals.isAdmin) { %>
+<%- include("../partials/unauthenticated") %>
+<% } else{%>
+<div class="container-sm">
+  <form action="" method="POST">
+    <div class="form-group">
+      <label for="name">Category name:</label>
+      <input type="text" class="form-control" id="name" name="name" value="<%=
+      locals.category ? category.name : "" %>" />
+    </div>
+    <% if (locals.errors) { %> <% errors.forEach(error => { %>
+    <p class="text-danger"><%= error.msg %></p>
+    <% }) %> <% } %>
+    <button class="btn btn-primary" type="submit">create</button>
+  </form>
+</div>
+<% } %>

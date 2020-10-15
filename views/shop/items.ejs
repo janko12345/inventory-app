@@ -1,0 +1,77 @@
+
+    <div class="dropdown mb-5 mx-5">
+        <button class="btn btn-secondary dropdown-toggle" id="dropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Show: <span id="filter"><%= activeCategory ? activeCategory.name : "all" %></span>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownButton">
+
+            <% if (categories.length > 0) { %>
+                <a href="<%= `/shop/items`%>" class="dropdown-item">all</a>
+            <% } %>
+
+            <% categories.forEach(category => { %>
+            <div class="d-flex position-relative">
+                <a href="<%= `/shop/items?category=${category._id}`%>" class="dropdown-item"><%= category.name %></a> <% if (locals.isAdmin) { %>
+                    <a href="<%= `/admin/deleteCategory/${category._id}` %>" class="dropdown-category" data-id="<%= category._id %>">delete</a>
+                <% } %> 
+            </div>
+            <% }) %>
+
+            <% if (locals.isAdmin) { %>
+                <a href="/admin/createCategory" class="dropdown-item create-category">new category</a>
+            <% } %>
+        </div>
+    </div>
+    <div class="container-xl">
+        <% if (items.length === 0) { %>
+            <p class="text-center lead">
+                No items in database found with such criteria
+            </p>
+        <% } %>
+        <div class="row row-gap-20">
+            <% if (locals.isAdmin) {%>
+                <div class="create-item">
+
+                </div>
+            <% } %>
+            <% items.forEach(item => { %>
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="text-center mb-0 text-uppercase"><strong><%= item.brand %></strong></h4>                        
+                        </div>
+                        <img src="<%= item.imgUrl %>" alt="item image" class="card-img-top">
+                        <div class="card-body">
+                            <p><strong>Category: </strong><%= item.category.name %></p>
+                            <p><strong>Stock: </strong><%= item.stock > 0 ? item.stock + " pieces" : "sold out" %> </p>
+                            <p><strong>Price: </strong><%= item.price %> €</p>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a href="<%= item.url %>" role="button" class="btn btn-primary">details</a>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+            
+        </div>
+    </div>
+
+
+<% if (locals.isAdmin) { %>
+    <script>
+        document.querySelector(".create-item").addEventListener("click", (event) =>{
+            window.location = "/admin/createItem";
+        });
+        // document.querySelector(".dropdown-menu").addEventListener("click", event =>{
+        //     if(!event.target.classList.contains("dropdown-category"))
+        //         return;
+        //     let target = event.target;
+        //     fetch(`http://localhost:3000/admin/deleteCategory/${target.dataset.id}`, {
+        //         method: "POST",
+        //     })
+        //         .then(res => res.url)
+        //         .then(url => window.location = url)
+        //         .catch(console.log);
+        // })
+    </script>
+<% } %>

@@ -1,0 +1,63 @@
+<% let {item} = locals %>  <% if(!locals.isAdmin) { %>
+<%- include("../partials/unauthenticated") %>
+<% }else { %>
+<div class="container-sm">
+  <form action="" method="POST">
+    <div class="form-group">
+      <label for="brand">Brand:</label>
+      <input
+        type="text"
+        class="form-control"
+        id="brand"
+        name="brand"
+        value="<%= item ? item.brand : ""%>"
+      />
+    </div>
+    <div class="form-group">
+      <select class="custom-select" name="category">
+        <option value="" selected>Choose category...</option>
+        <% categories.forEach(category => { %>
+        <option <%= item ? item.category ? item.category.toString() === category._id.toString() ? "selected" : "" : "" : ""%> value="<%= category._id %>"><%= category.name %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="stock">Stock:</label>
+      <input type="number" class="form-control" id="stock" name="stock" value="<%=item ? item.stock : ""%>" />
+    </div>
+    <div class="form-group">
+      <label for="price">Price:</label>
+      <input
+        type="number"
+        step="0.01"
+        class="form-control"
+        id="price"
+        name="price"
+        value="<%=item ? item.price : ""%>"
+      />
+    </div>
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <textarea
+        type="text"
+        class="form-control"
+        id="description"
+        name="description"
+      ><%=item && item.description !== "no description" ? item.description : ""%></textarea>
+    </div>
+    <div class="custom-file">
+      <label class="custom-file-label" for="image">Choose image:</label>
+      <input class="custom-file-input" type="file" id="image" name="image" />
+    </div>
+
+    <% if (locals.errors) { %>
+    <div class="mt-5">
+      <% errors.forEach(error => { %>
+      <p class="text-danger"><%= error.msg %></p>
+      <% }) %>
+    </div>
+    <% } %>
+    <button class="btn btn-primary btn-lg mt-3" type="submit">create</button>
+  </form>
+</div>
+<% } %>

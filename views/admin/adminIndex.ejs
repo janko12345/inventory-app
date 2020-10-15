@@ -1,0 +1,28 @@
+<div class="container-sm">
+  <% if (!locals.isAdmin) { %>
+    <form action="" method="POST">
+      <div class="form-group">
+        <label for="admin-verification">Admin password (hint: look at github repo <a class="text-primary" href="https://github.com/janko12345/inventory-app" target="_blank">here</a>)</label>
+        <input
+          class="form-control"
+          id="admin-verification"
+          name="password"
+          type="password"
+        />
+        <% if (locals.valid === false) { %>
+        <p class="text-danger text-small">Wrong password</p>
+        <% } %>
+      </div>
+      <button class="btn btn-primary btn-lg" type="submit">Submit</button>
+    </form>
+    <% } else { %>
+      <div class="d-flex justify-content-center">
+        <a href="/admin/createCategory" role="button" class="btn btn-primary mr-5"
+        >create category</a
+        ><a href="/admin/createItem" role="button" class="btn btn-primary"
+        >create item</a
+        >
+      </div>
+      <% } %>
+      
+</div>
