@@ -1,25 +1,27 @@
 
 <div class="container-fluid">
-    <div class="row w-50 mx-auto">
-        <div class="col-5">
+    <div class="row max-width-800 mx-auto flex-column flex-md-row align-items-center align-items-md-stretch row-gap-20">
+        <div class="col-sm-5">
             	<img class="w-100" src="<%= item.imgUrl %>" alt="item image">
         </div>
-        <div class="col-7">
+        <div class="col-sm-7">
             <p class="border-bottom"><strong>Id: </strong><%= item._id %></p>
             <p class="border-bottom"><strong>Brand: </strong><%= item.brand %></p>
             <p class="border-bottom"><strong>Description: </strong><%= item.description %></p>
             <p class="border-bottom"><strong>Category: </strong><%= item.category.name %></p>
             <p class="border-bottom"><strong>Stock: </strong><%= item.stock %> <%= item.stock === 1 ? "piece" : "pieces" %></p>
             <p class="border-bottom"><strong>Price: </strong><%= item.price %> €</p>
-                    <form action="<%= `/shop/buyItem/${item._id}` %>" method="POST" class="d-inline">
-                        <button <%= item.stock === 0 ? "disabled" : "" %> class="btn btn-primary btn-lg"><%= item.stock === 0 ? "Sold out" : "Buy"%></button>
-                    </form>
-                    <% if (locals.isAdmin) { %>
-                     <a href="<%= `/admin/updateItem/${item._id}` %>" role="button" class="btn btn-primary btn-lg">update</a>
-                     <form method="post" action="<%= `/admin/deleteItem/${item._id}` %>" class="d-inline-block" >
-                         <button id="del-item-btn" class="btn btn-primary btn-lg">delete</button>
-                     </form>
-                    <% } %>
+                    <div class="text-center">
+                        <form action="<%= `/shop/buyItem/${item._id}` %>" method="POST" class="d-inline">
+                            <button <%= item.stock === 0 ? "disabled" : "" %> class="btn btn-primary btn-lg mb-3"><%= item.stock === 0 ? "Sold out" : "Buy"%></button>
+                        </form>
+                        <% if (locals.isAdmin) { %>
+                         <a href="<%= `/admin/updateItem/${item._id}` %>" role="button" class="btn btn-primary btn-lg mb-3">update</a>
+                         <form method="post" action="<%= `/admin/deleteItem/${item._id}` %>" class="d-inline-block" >
+                             <button id="del-item-btn" class="btn btn-primary btn-lg mb-3">delete</button>
+                         </form>
+                        <% } %>
+                    </div>
         </div>
     </div>
 </div>
