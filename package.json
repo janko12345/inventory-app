@@ -1,6 +1,9 @@
 {
   "name": "npm-tests",
   "version": "0.0.0",
+  "engines": {
+    "node": "14.13.1"
+  },
   "main": "www",
   "private": true,
   "scripts": {

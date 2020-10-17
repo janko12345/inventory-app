@@ -5,9 +5,7 @@
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownButton">
 
-            <% if (categories.length > 0) { %>
-                <a href="<%= `/shop/items`%>" class="dropdown-item">all</a>
-            <% } %>
+            <a href="<%= `/shop/items`%>" class="dropdown-item">all</a>
 
             <% categories.forEach(category => { %>
             <div class="d-flex position-relative">
