@@ -14,6 +14,11 @@ require("dotenv").config();
 let isAdmin = false;
 const { ADMIN_PASSWORD = "Name of famous Slovak Tour de France cyclist. Format:<Firstname> <Lastname>", MONGODB_URI } = process.env;
 
+// password restart workaround
+setInterval(() => {
+  isAdmin = false;
+}, 1000 * 60 * 60);
+
 // router variables
 var indexRouter = require("./routes/index");
 var adminRouter = require("./routes/admin");
