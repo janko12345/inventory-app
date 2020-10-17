@@ -12,7 +12,7 @@ require("dotenv").config();
 
 // variables
 let isAdmin = false;
-const { ADMIN_PASSWORD = "you can't guess it", MONGODB_URI } = process.env;
+const { ADMIN_PASSWORD = "Name of famous Slovak Tour de France cyclist. Format:<Firstname> <Lastname>", MONGODB_URI } = process.env;
 
 // router variables
 var indexRouter = require("./routes/index");
@@ -51,7 +51,6 @@ app.set("layout", "layouts/main");
 
 app.use((req, res, next) => {
   if (req.body.password === ADMIN_PASSWORD) isAdmin = true;
-  console.log(isAdmin);
   res.locals.isAdmin = isAdmin;
   next();
 });

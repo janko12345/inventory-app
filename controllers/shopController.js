@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Category = require("../models/category");
 const Item = require("../models/item");
 
-exports.allItems = (req, res, next) => {
+exports.allItems_get = (req, res, next) => {
   let isValidId = mongoose.isValidObjectId(req.query.category) && req.query.category !== undefined && req.query.category !== null;
 
   Promise.all([
@@ -34,7 +34,6 @@ exports.itemBuy_post = (req,res,next) => {
       item.stock = item.stock === 0 ? item.stock : item.stock - 1;
       Item.findByIdAndUpdate(item._id,item,(error,document) =>{
         if(error) return next(error);
-        console.log(document);
         res.redirect(item.url);
       })
     })

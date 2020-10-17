@@ -3,7 +3,7 @@ var router = express.Router();
 const shopController = require("../controllers/shopController");
 
 /* GET users listing. */
-router.get("/items", shopController.allItems);
+router.get("/items", shopController.allItems_get);
 
 router.get("/items/:id", shopController.item_get);
 

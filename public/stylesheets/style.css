@@ -2,6 +2,11 @@ a {
   color: inherit;
 }
 
+.nav-link {
+  font-size: 1.5rem;
+  margin-right: 1em;
+}
+
 .main-bg-img {
   background: url("/images/index.jpg") center no-repeat;
   margin-top: -100px;
@@ -38,10 +43,11 @@ a {
 }
 
 .create-item {
-  height: 493px;
-  margin: 0 15px;
-  width: 350px;
   border: 5px solid greenyellow;
+  height: 100%;
+  width: 100%;
+  min-height: 300px;
+  display: block;
   position: relative;
   cursor: pointer;
   -webkit-transition: -webkit-transform 0.5s;
@@ -111,8 +117,7 @@ a {
 }
 
 .active {
-  color: yellow;
-  border-bottom: 3px solid yellow;
+  color: yellow !important;
 }
 
 .navbar-offset-padding {

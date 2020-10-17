@@ -5,6 +5,25 @@ const { body, validationResult } = require("express-validator");
 const Category = require("../models/category");
 const Item = require("../models/item");
 
+// dependencies for file upload
+const multer = require("multer");
+const path = require("path");
+
+const storage = multer.diskStorage({
+  destination: "./public/images/uploads",
+  filename: (req, file,cb) => {
+    cb(null,`${file.fieldname} - ${Date.now()}${path.extname(file.originalname)}`)
+  }
+  
+});
+
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 1024 * 1024 * 2,
+  },
+}).single("image");
+
 exports.index_get = (req, res, next) => {
   res.render("admin/adminIndex", {
     title: res.locals.isAdmin ? "Admin" : "Guest",
@@ -23,6 +42,8 @@ exports.index_post = (req, res, next) => {
       title: "Admin",
     });
 };
+
+/* CATEGORIES */
 
 exports.createCategory_get = (req, res, next) => {
   res.render("admin/form_category", { title: "create category" });
@@ -45,23 +66,46 @@ exports.createCategory_post = [
       });
     } else {
       category.save((err, product) => {
-        if (err) return console.log(err);
-        console.log("sucessfully saved product: " + product);
+        if (err) return next(err);
         res.redirect(`/shop/items?category=${category._id}`);
       });
     }
   },
 ];
 
-exports.createItem_get = (req, res, next) => {
-  Category.find()
-    .then((categories) => {
-    res.render("admin/form_item", { title: "create item", categories });
-  })
+exports.deleteCategory_get = (req,res,next) => {
+  Item.find({category: req.params.id})
+    .then(items =>{
+      res.render("admin/deleteCategory", { title: "delete category", items});
+    })
     .catch(next);
-};
+}
 
-exports.item_formValidation = [
+exports.deleteCategory_post = (req,res,next) => {
+  if(!res.locals.isAdmin) return res.redirect("/admin")
+  Promise.all([
+    Item.find({category: req.params.id}),
+    Category.findById(req.params.id)
+  ])
+    .then(results =>{
+      let [items, category] = results;
+      if(items.length > 0)
+        return res.redirect(`/admin/deleteCategory/${category._id}`);
+
+      category.remove((err,product) =>{
+        if(err) return next(err);
+        res.redirect("/shop/items");
+      })
+    })
+    .catch(next);
+}
+
+
+
+/* ITEMS */
+
+// array middleware functions for validating and sanitizing input
+const item_formValidation = [
   body("brand", "field BRAND must not be empty")
     .trim()
     .isLength({ min: 1 })
@@ -77,13 +121,26 @@ exports.item_formValidation = [
     gt: 0,
   }),
   body("description").trim(),
-]
+];
 
-  exports.createItem_post = (req, res, next) => {
+exports.createItem_get = (req, res, next) => {
+  Category.find()
+    .then((categories) => {
+    res.render("admin/form_item", { title: "create item", categories });
+  })
+    .catch(next);
+};
+
+
+
+  exports.createItem_post = [
+    upload,
+    item_formValidation,
+    (req, res, next) => {
     if(!res.locals.isAdmin) return res.redirect("/admin");
     
     let errors = validationResult(req);
-    let { brand, category, stock, price, description, image } = req.body;
+    let { brand, category, stock, price, description } = req.body;
     let item = new Item({
       brand,
       category,
@@ -91,45 +148,50 @@ exports.item_formValidation = [
       price,
     });
     if (description) item.description = description;
+    if(req.file !== undefined) item.imgUrl = `/images/uploads/${req.file.filename}`;
     if (!errors.isEmpty()) {
-      Category.find()
-        .then((categories) => {
-        res.render("admin/form_item", {
-          title: "create item",
-          categories,
-          item,
-          errors: errors.array(),
-        });
-      })
-        .catch(next);
+        
+        Category.find()
+          .then((categories) => {
+          res.render("admin/form_item", {
+            title: "create item",
+            categories,
+            item,
+            errors: errors.array(),
+          });
+        })
+          .catch(next);
     } else {
+      
       item.save((error, product) => {
-        if (error) return console.log(error);
-        console.log("product created sucessfully: " + product);
-        res.redirect(item.url);
-      });
+          if (error) return next(error);
+          res.redirect(item.url);
+        });
     }
-  };
+  }];
 
 
 
 exports.updateItem_get = (req,res,next) => {
   if(!mongoose.isValidObjectId(req.params.id))
-  return res.redirect("/shop/items");
-  console.log(!mongoose.isValidObjectId(req.params.id));
+    return res.redirect("/shop/items");
+
   Promise.all([
     Category.find(),
     Item.findById(req.params.id)
   ])
     .then(results =>{
       let [categories, item] = results
-      res.render("admin/form_item", { title: "update item", item, categories})
+      res.render("admin/form_item", { title: "update item", item, categories, update: true})
     })
     .catch(next)
-}
+};
 
 
-exports.updateItem_post = (req, res, next) => {
+exports.updateItem_post = [
+  upload,
+  item_formValidation,
+  (req, res, next) => {
     if(!res.locals.isAdmin) return res.redirect("/admin")
 
   let errors = validationResult(req);
@@ -142,6 +204,7 @@ exports.updateItem_post = (req, res, next) => {
     price,
   });
   if (description) item.description = description;
+  if(req.file !== undefined) item.imgUrl = `/images/uploads/${req.file.filename}`;
   if (!errors.isEmpty()) {
     Category.find()
       .then((categories) => {
@@ -159,31 +222,12 @@ exports.updateItem_post = (req, res, next) => {
       res.redirect(item.url);
     })
   }
-};
+}];
 
 exports.deleteItem_post = (req,res,next) => {
   Item.findByIdAndRemove(req.params.id,(error,document) =>{
     if (error) return next(error);
-    res.redirect(`/shop/items?category=${document.category.toString()}`);
-  })
-}
-
-exports.deleteCategory_get = (req,res,next) => {
-  Item.find({category: req.params.id})
-    .then(items =>{
-      if(items.length === 0){
-        return res.render("admin/deleteCategory", { title: "delete category"});
-      }
-      res.render("admin/deleteCategory", { title: "delete category"});
-    })
-    .catch(next);
-}
-
-exports.deleteCategory_post = (req,res,next) => {
-  if(!res.locals.isAdmin) return res.redirect("/admin")
-  
-  Category.findByIdAndRemove(req.params.id,(error,document) =>{
-    if (error) return next(error);
     res.redirect(`/shop/items`);
   })
 }
+

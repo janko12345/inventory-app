@@ -1,0 +1,14 @@
+<div class="card">
+    <div class="card-header">
+        <h4 class="text-center mb-0 text-uppercase"><strong><%= item.brand %></strong></h4>                        
+    </div>
+    <img src="<%= item.imgUrl %>" alt="item image" class="card-img-top">
+    <div class="card-body">
+        <p><strong>Category: </strong><%= item.category.name %></p>
+        <p><strong>Stock: </strong><%= item.stock > 0 ? item.stock + " pieces" : "sold out" %> </p>
+        <p><strong>Price: </strong><%= item.price %> €</p>
+    </div>
+    <div class="card-footer text-center">
+        <a href="<%= item.url %>" role="button" class="btn btn-primary">details</a>
+    </div>
+</div>

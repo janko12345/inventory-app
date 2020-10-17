@@ -1,5 +1,8 @@
 @import "./partials/resets";
-
+.nav-link {
+  font-size: 1.5rem;
+  margin-right: 1em;
+}
 .main-bg-img {
   background: url("/images/index.jpg") center no-repeat;
   margin-top: -100px;
@@ -32,10 +35,11 @@
 }
 
 .create-item {
-  height: 493px;
-  margin: 0 15px;
-  width: 350px;
   border: 5px solid greenyellow;
+  height: 100%;
+  width: 100%;
+  min-height: 300px;
+  display: block;
   position: relative;
   cursor: pointer;
   transition: transform 0.5s;

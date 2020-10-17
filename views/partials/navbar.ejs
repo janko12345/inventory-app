@@ -1,13 +1,26 @@
-<nav class="bg-primary text-lg mb-5">
-  <ul class="nav justify-content-end pr-5">
-    <li class="nav-item mr-5">
-      <a class="nav-link" href="/">Home</a>
-    </li>
-    <li class="nav-item mr-5">
-      <a class="nav-link" href="/admin">Admin</a>
-    </li>
-    <li class="nav-item mr-5">
-      <a class="nav-link" href="/shop/items">Shop</a>
-    </li>
-  </ul>
+<nav class="navbar navbar-expand-sm navbar-light bg-primary mb-5">
+  <button class="ml-auto navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="text-right collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+      <li class="nav-item">
+        <a id="/" class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+        <a id="/admin" class="nav-link" href="/admin">Admin</a>
+      </li>
+      <li class="nav-item">
+        <a id="/shop" class="nav-link" href="/shop/items">Shop</a>
+      </li>
+    </ul>
+    
+  </div>
 </nav>
+
+<script>
+  let path = document.location.pathname;
+  let id = path.match(/^\/(admin|shop)?/)[0];
+  document.getElementById(id).classList.add("active");
+</script>
