@@ -25,3 +25,8 @@
 .max-width-800 {
   max-width: 800px;
 }
+
+// because of github logo, that has to be position absolute in order to pull it left
+.min-height-94 {
+  min-height: 94px;
+}

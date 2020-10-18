@@ -112,6 +112,14 @@ a {
   color: #00aeff;
 }
 
+@media (max-width: 576px) {
+  .logo-sm {
+    position: absolute;
+    left: 16px;
+    top: 8px;
+  }
+}
+
 .text-lg {
   font-size: 1.5rem !important;
 }
@@ -138,5 +146,9 @@ a {
 
 .max-width-800 {
   max-width: 800px;
+}
+
+.min-height-94 {
+  min-height: 94px;
 }
 /*# sourceMappingURL=style.css.map */
