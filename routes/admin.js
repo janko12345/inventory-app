@@ -17,6 +17,7 @@ router.get("/updateItem/:id",adminController.updateItem_get);
 router.post("/updateItem/:id",adminController.updateItem_post);
 
 router.post("/deleteItem/:id",adminController.deleteItem_post);
+router.post("/deleteAllCategoryItems/:id",adminController.deleteAllCategoryItems_post);
 
 router.get("/deleteCategory/:id", adminController.deleteCategory_get);
 router.post("/deleteCategory/:id", adminController.deleteCategory_post);

@@ -11,8 +11,8 @@ var mongoose = require("mongoose");
 require("dotenv").config();
 
 // variables
-let isAdmin = false;
-const { ADMIN_PASSWORD = "Name of famous Slovak Tour de France cyclist. Format:<Firstname> <Lastname>", MONGODB_URI } = process.env;
+const {NODE_ENV, MONGODB_URI, ADMIN_PASSWORD = "Name of famous Slovak Tour de France cyclist. Format:<Firstname> <Lastname>" } = process.env;
+let isAdmin = NODE_ENV === "development";
 
 // password restart workaround
 setInterval(() => {

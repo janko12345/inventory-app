@@ -173,6 +173,7 @@ exports.createItem_get = (req, res, next) => {
 
 
 exports.updateItem_get = (req,res,next) => {
+  console.log("we got here")
   if(!mongoose.isValidObjectId(req.params.id))
     return res.redirect("/shop/items");
 
@@ -231,3 +232,16 @@ exports.deleteItem_post = (req,res,next) => {
   })
 }
 
+exports.deleteAllCategoryItems_post = (req,res,next) => {
+  if(!mongoose.isValidObjectId(req.params.id))
+    return res.redirect("/shop/items");
+  Item.find({category: req.params.id})  
+    .then(items =>{
+      items.forEach(item => item.remove((err,product) =>{
+        if (err) return next(err);
+
+        res.redirect(`/admin/deleteCategory/${req.params.id}`);
+      }))
+    })
+    .catch(next);
+}

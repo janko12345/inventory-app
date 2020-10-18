@@ -4,7 +4,10 @@
 <div class="text-center">
 
     <% if (items.length > 0) { %>
-    <h3 class="mb-5">If you want to delete this category, first you need to delete all its items</h3>
+        <h3 class="mb-3">If you want to delete this category, first you need to delete all its items</h3>
+        <form action="/admin/deleteAllCategoryItems/<%= items[0].category._id %>" method="POST" class="mb-4">
+            <button id="delete-all" class="btn btn-primary">delete all</button>
+        </form>
     <h4 class="font-weight-bold">items:</h4>
 
     <ul class="list-unstyled">
@@ -24,3 +27,10 @@
     <% } %>
 </div>
 <% } %>
+
+<script>
+    document.getElementById("delete-all").addEventListener("click", event => {
+        event.preventDefault();    
+        event.target.textContent = "confirm";
+    },{once: true})
+</script>
